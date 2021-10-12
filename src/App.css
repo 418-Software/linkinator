@@ -1,0 +1,13 @@
+body {
+    min-height: 500px;
+	min-width: 600px;
+}
+
+.label {
+    float: left;
+    word-wrap: break-word;
+}
+
+.MuiGrid-container {
+    align-items: center;
+}
