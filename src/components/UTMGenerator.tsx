@@ -23,7 +23,7 @@ interface State{
 }
 
 export class UTMGenerator extends React.Component<Props, State> {
-    caches: [PersistentListCache];
+    caches: Map<string, PersistentListCache>;
     textInputs: { campaign: string; content: string; medium: string; source: string; term: string; };
 
     constructor(props: Props) {
@@ -36,21 +36,22 @@ export class UTMGenerator extends React.Component<Props, State> {
             term: ''
         }
 
-        this.caches = [new PersistentListCache("linkCache")];
+        this.caches = new Map([["linkCache", new PersistentListCache("linkCache")]]);
         for (var key of Object.keys(this.textInputs)){
-            this.caches.push(new PersistentListCache(key + "Cache"))
+            var name = key + "Cache"
+            this.caches.set(name, new PersistentListCache(name))
         }
         
         // State seems to require a pretty flat structure, so this is going
         // to force some copy/paste code
         this.state = {
             currentURL: '',
-            campaignCache: this.caches["campaignCache"].get(),
-            contentCache: this.caches["contentCache"].get(),
-            linkCache: this.caches["linkCache"].get(),
-            mediumCache: this.caches["mediumCache"].get(),
-            sourceCache: this.caches["sourceCache"].get(),
-            termCache: this.caches["termCache"].get(),
+            campaignCache: this.caches.get("campaignCache")!.get(),
+            contentCache: this.caches.get("contentCache")!.get(),
+            linkCache: this.caches.get("linkCache")!.get(),
+            mediumCache: this.caches.get("mediumCache")!.get(),
+            sourceCache: this.caches.get("sourceCache")!.get(),
+            termCache: this.caches.get("termCache")!.get(),
             sourceURL: '',
             trackingURL: '',
         };
@@ -58,10 +59,12 @@ export class UTMGenerator extends React.Component<Props, State> {
         this.currentUrlListener = this.currentUrlListener.bind(this);
         this.handleChangedInput = this.handleChangedInput.bind(this);
         this.addItemToCache = this.addItemToCache.bind(this);
+        this.updateStateFromCache = this.updateStateFromCache.bind(this);
+        this.updateCacheEntry = this.updateCacheEntry.bind(this);
     }
 
     addItemToCache(cacheName: string, link: string) {
-        var obj = this.caches[cacheName];
+        var obj = this.caches.get(cacheName)!;
         obj.add(link);
         this.updateStateFromCache(cacheName);
     }
@@ -90,9 +93,14 @@ export class UTMGenerator extends React.Component<Props, State> {
         this.updateTrackingURL()
     }
 
+    updateCacheEntry(cacheName: string, value: string){
+        var obj = this.caches.get(cacheName)!;
+        obj.add(value);
+        this.updateStateFromCache(cacheName)
+    }
+
     updateStateFromCache(cacheName: string){
-        var obj = this.caches[cacheName];
-        console.log(obj);
+        var obj = this.caches.get(cacheName)!;
         obj.refresh();
         var stateObject = {};
         stateObject[cacheName] = obj.get();
@@ -121,11 +129,11 @@ export class UTMGenerator extends React.Component<Props, State> {
                 <LinkSelector linkCache={this.state.linkCache} cacheName="linkCache" onOpen={this.updateStateFromCache} value={this.state.sourceURL}/>
             </Grid>
             <Grid item>
-                <TextFieldWithDescription name="source" options={this.state.sourceCache} value={this.textInputs.source} onOpen={this.updateStateFromCache} onChange={this.handleChangedInput} description="Where the link is being posted.  Usually something like Medium, Facebook, Twitter, LinkedIn, etc."/>
-                <TextFieldWithDescription name="medium" options={this.state.mediumCache} value={this.textInputs.medium} onOpen={this.updateStateFromCache} onChange={this.handleChangedInput} description="How the link is being delivered.  Usually email, banner, social media, etc."/>
-                <TextFieldWithDescription name="term" options={this.state.termCache} value={this.textInputs.term} onOpen={this.updateStateFromCache} onChange={this.handleChangedInput} description="Paid keywords or other identifying terms."/>
-                <TextFieldWithDescription name="content" options={this.state.contentCache} value={this.textInputs.content} onOpen={this.updateStateFromCache} onChange={this.handleChangedInput} description="Any string to help you differentiate this link in your analytics platform."/>
-                <TextFieldWithDescription name="campaign" options={this.state.campaignCache} value={this.textInputs.campaign} onOpen={this.updateStateFromCache} onChange={this.handleChangedInput} description="The name of the ad campaign this link is a part of."/>
+                <TextFieldWithDescription name="source" options={this.state.sourceCache} value={this.textInputs.source} onBlur={this.updateCacheEntry} onOpen={this.updateStateFromCache} onChange={this.handleChangedInput} description="Where the link is being posted.  Usually something like Medium, Facebook, Twitter, LinkedIn, etc."/>
+                <TextFieldWithDescription name="medium" options={this.state.mediumCache} value={this.textInputs.medium} onBlur={this.updateCacheEntry} onOpen={this.updateStateFromCache} onChange={this.handleChangedInput} description="How the link is being delivered.  Usually email, banner, social media, etc."/>
+                <TextFieldWithDescription name="term" options={this.state.termCache} value={this.textInputs.term} onBlur={this.updateCacheEntry} onOpen={this.updateStateFromCache} onChange={this.handleChangedInput} description="Paid keywords or other identifying terms."/>
+                <TextFieldWithDescription name="content" options={this.state.contentCache} value={this.textInputs.content} onBlur={this.updateCacheEntry} onOpen={this.updateStateFromCache} onChange={this.handleChangedInput} description="Any string to help you differentiate this link in your analytics platform."/>
+                <TextFieldWithDescription name="campaign" options={this.state.campaignCache} value={this.textInputs.campaign} onBlur={this.updateCacheEntry} onOpen={this.updateStateFromCache} onChange={this.handleChangedInput} description="The name of the ad campaign this link is a part of."/>
             </Grid>
             <Grid item>
                 <Grid container spacing={2} padding={1}>

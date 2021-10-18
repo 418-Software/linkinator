@@ -7,6 +7,7 @@ interface Props {
     name: string
     description: string
     value: string
+    onBlur: Function
     onChange: Function
     onOpen: Function
     options: [string]
@@ -32,6 +33,7 @@ export class TextFieldWithDescription extends React.Component<Props> {
                 <Autocomplete fullWidth
                     freeSolo
                     id={this.props.name + "-selector"}
+                    onBlur={() => {this.props.onBlur(this.cacheName, this.props.value)}}
                     onOpen={() => {this.props.onOpen(this.cacheName)}}
                     options={this.props.options}
                     renderInput={(params) =><TextField
