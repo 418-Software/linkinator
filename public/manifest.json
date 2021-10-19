@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "LinkRacker",
+  "name": "Linkinator",
   "version": "0.1.0",
   "description": "Easily build your UTM links.",
   "author": "Mike Healey",
@@ -10,7 +10,7 @@
     "128": "icon128.png"
   },
   "action": {
-    "default_title": "LinkRacker",
+    "default_title": "Linkinator",
     "default_popup": "index.html",
     "default_icon": {
       "16": "icon16.png",
