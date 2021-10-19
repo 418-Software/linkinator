@@ -36,6 +36,7 @@ export class TextFieldWithDescription extends React.Component<Props> {
                     onBlur={this.handleBlur}
                     onOpen={() => {this.props.onOpen(this.cacheName)}}
                     options={this.props.options}
+                    value={this.props.value}
                     renderInput={(params) =><TextField
                         {...params}
                         label={this.props.name}

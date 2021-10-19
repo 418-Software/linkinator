@@ -2,8 +2,10 @@
 export class PersistentListCache{
     name: string
     items: [string]
+    maxItems: number
 
     constructor(name: string){
+        this.maxItems = 10;
         this.name = name;
         this.items = [''];
         this.refresh();
@@ -17,6 +19,9 @@ export class PersistentListCache{
         } else if(this.items.includes(item)){
             // Nothing to do here.
         } else {
+            if (this.items.length >= this.maxItems){
+                this.items.shift();
+            }
             this.items.push(item);
         }
         this._set();

@@ -1,11 +1,12 @@
 import * as React from "react";
-import { Divider } from "@mui/material";
+import { Divider, IconButton } from "@mui/material";
 import Grid from '@mui/material/Grid';
 import { LinkSaveButton } from "./LinkSaveButton";
 import { LinkSelector } from "./LinkSelector";
 import { TextFieldWithDescription } from "./TextFieldWithDescription";
 import TextField from '@mui/material/TextField';
 import { PersistentListCache } from "../lib/persistentCache"
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 interface Props {
 }
@@ -63,6 +64,7 @@ export class UTMGenerator extends React.Component<Props, State> {
         this.updateStateFromCache = this.updateStateFromCache.bind(this);
         this.updateCacheEntry = this.updateCacheEntry.bind(this);
         this.updateTrackingURL = this.updateTrackingURL.bind(this);
+        this.copyToClipboard = this.copyToClipboard.bind(this);
     }
 
     addItemToCache(cacheName: string, link: string) {
@@ -78,6 +80,11 @@ export class UTMGenerator extends React.Component<Props, State> {
     }
   
     componentWillUnmount() {
+    }
+
+    async copyToClipboard(text){
+        console.log("Saving to clipboard: " + text)
+        await navigator.clipboard.writeText(text);
     }
 
     currentUrlListener() {
@@ -148,7 +155,15 @@ export class UTMGenerator extends React.Component<Props, State> {
                     value={this.state.trackingURL}
                     size="small"
                     InputLabelProps={{shrink: true}}
-                    InputProps={{readOnly: true}}
+                    InputProps={{
+                        readOnly: true, 
+                        endAdornment: <IconButton
+                            onClick={() => {this.copyToClipboard(this.state.trackingURL)}}
+                            edge="end"
+                        >
+                        <ContentCopyIcon/>
+                        </IconButton>
+                    }}
                     variant="standard"
                     />
                 </Grid>

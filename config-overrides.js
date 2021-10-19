@@ -34,7 +34,8 @@ module.exports = {
       },
     };
 
-    config.devtool = "inline-source-map";
+    // Enable debug
+    // config.devtool = "inline-source-map";
 
     // `false`: each entry chunk embeds runtime.
     // The extension is built with a single entry including all JS.
