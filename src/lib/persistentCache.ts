@@ -6,11 +6,11 @@ export class PersistentListCache{
     constructor(name: string){
         this.name = name;
         this.items = [''];
+        this.refresh();
     }
 
     add(item: string){
         // add new entry to cached list
-        console.log("Adding item: " + item + " to " + this.name)
         this.refresh();
         if(this.items === undefined || this.items[0] === ''){
             this.items = [item];

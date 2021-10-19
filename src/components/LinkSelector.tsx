@@ -7,10 +7,23 @@ interface Props {
     cacheName: string
     linkCache: [string]
     onOpen: Function
-    value: string
+    onBlur: Function
 }
 
 export class LinkSelector extends React.Component<Props> {
+    cacheName: string;
+
+    constructor(props: Props){
+        super(props);
+        this.cacheName = "linkCache"
+
+        this.handleBlur = this.handleBlur.bind(this);
+    }
+
+    handleBlur(event){
+        this.props.onBlur(this.cacheName, event.target.value);
+    }
+
     render() {
         return (
         <Grid container spacing={2} padding={1}>
@@ -18,6 +31,7 @@ export class LinkSelector extends React.Component<Props> {
                 <Autocomplete fullWidth
                     freeSolo
                     id="link-selector"
+                    onBlur={this.handleBlur}
                     onOpen={() => {this.props.onOpen(this.props.cacheName)}}
                     options={this.props.linkCache}
                     renderInput={(params) => <TextField
@@ -26,7 +40,6 @@ export class LinkSelector extends React.Component<Props> {
                         size="small"
                         InputLabelProps={{...params.InputProps, shrink: true}}
                         variant="standard"
-                        value={this.props.value}
                         />
                     }
                 />

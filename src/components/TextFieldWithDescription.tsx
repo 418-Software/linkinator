@@ -8,7 +8,6 @@ interface Props {
     description: string
     value: string
     onBlur: Function
-    onChange: Function
     onOpen: Function
     options: [string]
 }
@@ -18,12 +17,13 @@ export class TextFieldWithDescription extends React.Component<Props> {
 
     constructor(props: Props) {
         super(props);
-        this.handleChange = this.handleChange.bind(this);
         this.cacheName = this.props.name + "Cache"
+
+        this.handleBlur = this.handleBlur.bind(this);
     }
 
-    handleChange(event){
-        this.props.onChange(event.target.value, this.props.name);
+    handleBlur(event){
+        this.props.onBlur(this.cacheName, event.target.value);
     }
 
     render() {
@@ -33,16 +33,14 @@ export class TextFieldWithDescription extends React.Component<Props> {
                 <Autocomplete fullWidth
                     freeSolo
                     id={this.props.name + "-selector"}
-                    onBlur={() => {this.props.onBlur(this.cacheName, this.props.value)}}
+                    onBlur={this.handleBlur}
                     onOpen={() => {this.props.onOpen(this.cacheName)}}
                     options={this.props.options}
                     renderInput={(params) =><TextField
                         {...params}
                         label={this.props.name}
-                        onChange={this.handleChange}
                         size="small"
                         InputLabelProps={{...params.InputProps, shrink: true}}
-                        value={this.props.value}
                         />
                     }
                 />
