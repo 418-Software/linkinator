@@ -14,7 +14,8 @@
    - You should see a new extension appear in the main window
 9. Make sure the extension is pinned to the URL bar:
    - Open the "Extensions" tool from the URL bar (looks like a puzzle piece outline)
-   - Click the pin next to "Linkinator" ![step 9](doc-images/step9.png)
+   - Click the pin next to "Linkinator" 
+   - ![step 9](doc-images/step9.png)
 
 Now you can use Linkinator.
 
