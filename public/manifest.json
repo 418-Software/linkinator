@@ -5,17 +5,15 @@
   "description": "Easily build your UTM links.",
   "author": "Mike Healey",
   "icons": {
-    "16": "icon16.png",
-    "48": "icon48.png",
-    "128": "icon128.png"
+    "48": "icons8-link-48.png",
+    "96": "icons8-link-96.png"
   },
   "action": {
     "default_title": "Linkinator",
     "default_popup": "index.html",
     "default_icon": {
-      "16": "icon16.png",
-      "48": "icon48.png",
-      "128": "icon128.png"
+      "48": "icons8-link-48.png",
+      "96": "icons8-link-96.png"
     }
   },
   "permissions": ["storage", "tabs"]
